@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/natoine/petitsempruntsreact/issues"
   },
-  "homepage": "https://github.com/natoine/petitsempruntsreact#readme"
+  "homepage": "https://github.com/natoine/petitsempruntsreact#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
