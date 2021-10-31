@@ -1,0 +1,19 @@
+{
+  "name": "petitsempruntsreact",
+  "version": "1.0.0",
+  "description": "une app pour se prêter des trucs entre amis, recodé en react",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/natoine/petitsempruntsreact.git"
+  },
+  "author": "natoine",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/natoine/petitsempruntsreact/issues"
+  },
+  "homepage": "https://github.com/natoine/petitsempruntsreact#readme"
+}
