@@ -23,8 +23,9 @@ app.post('/newlend', function (request, response){
           'Content-Type': 'text/plain'
         }).end(err);
       }
+      const id = res.insertedId ;
       client.close();
-      let resbody = "lend created" ;
+      let resbody = "lend created with id : " + id.toHexString() ;
       response.writeHead(201, {
         'Content-Length': Buffer.byteLength(resbody),
         'Content-Type': 'text/plain'
