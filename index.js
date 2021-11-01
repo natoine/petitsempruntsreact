@@ -12,14 +12,23 @@ app.get('/', function (req, res) {
   res.send('Bienvenue sur petits emprunts bientôt en react - on bosse sur la home pour le moment !');
 });
 
-app.post('/newlend', function (req, res){
+app.post('/newlend', function (request, response){
   mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }, function (err, client) {
     let dbcol = client.db("petitsemprunts").collection("lends");
     let myobj = {creator: 'John', loaner: 'Didier', borrower:'John', what:'BD thorgal - les archers', when:'now'};
     dbcol.insertOne(myobj, function(err, res) {
-      if (err) throw err;
-      console.log("1 document inserted");
+      if (err) {
+        response.writeHead(500, {
+          'Content-Length': Buffer.byteLength(err),
+          'Content-Type': 'text/plain'
+        }).end(err);
+      }
       client.close();
+      let resbody = "lend created" ;
+      response.writeHead(201, {
+        'Content-Length': Buffer.byteLength(resbody),
+        'Content-Type': 'text/plain'
+      }).end(resbody);
     });
   });
 });
