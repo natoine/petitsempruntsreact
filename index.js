@@ -14,6 +14,16 @@ app.get('/', function (req, res) {
   res.send('Bienvenue sur petits emprunts bientôt en react - on bosse sur la home pour le moment !');
 });
 
+app.get('/lends', function (req, res) {
+  mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }, function (err, client) {
+    client.db("petitsemprunts").collection("lends").find().toArray(function(err, items) {
+      res.send(items);
+    });
+  });
+
+
+});
+
 app.post('/newlend', function (request, response){
   const newlend = request.body ;
   mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }, function (err, client) {
