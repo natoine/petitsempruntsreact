@@ -8,7 +8,7 @@ const mongodb = require('mongodb');
 const urimongo = require("./resources/secret/databaseconfig.js").url;
 //console.log(urimongo);
 
-app.use(express.json());//need to parse request body in json
+app.use(express.json());//needed to parse request body in json
 
 app.get('/', function (req, res) {
   res.send('Bienvenue sur petits emprunts bientôt en react - on bosse sur la home pour le moment !');
@@ -16,11 +16,9 @@ app.get('/', function (req, res) {
 
 app.post('/newlend', function (request, response){
   const newlend = request.body ;
-  console.log("lend",newlend);
   mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }, function (err, client) {
     let dbcol = client.db("petitsemprunts").collection("lends");
-    let myobj = {creator: 'John', loaner: 'Didier', borrower:'John', what:'BD thorgal - les archers', when:'now'};
-    dbcol.insertOne(myobj, function(err, res) {
+    dbcol.insertOne(newlend, function(err, res) {
       if (err) {
         response.writeHead(500, {
           'Content-Length': Buffer.byteLength(err),
