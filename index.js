@@ -2,7 +2,7 @@
 
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000 ;
+const PORT = process.env.PORT || 3000;
 
 const dbservice = require('./services/DataBaseService');
 
@@ -13,28 +13,25 @@ app.get('/', function (req, res) {
 });
 
 app.get('/lends', function (req, res) {
-  dbservice.getLends(function(data){res.send(data)});
+  dbservice.getLends(function (data) { res.send(data) });
 });
 
-app.post('/newlend', function (request, response){
-  const newlend = request.body ;
-  mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }, function (err, client) {
-    let dbcol = client.db("petitsemprunts").collection("lends");
-    dbcol.insertOne(newlend, function(err, res) {
-      if (err) {
-        response.writeHead(500, {
-          'Content-Length': Buffer.byteLength(err),
-          'Content-Type': 'text/plain'
-        }).end(err);
-      }
-      const id = res.insertedId ;
-      client.close();
-      let resbody = "lend created with id : " + id.toHexString() ;
+app.post('/newlend', function (request, response) {
+  const newlend = request.body;
+  dbservice.createLend(newlend, function (error, newLendId) {
+    if (error) {
+      response.writeHead(500, {
+        'Content-Length': Buffer.byteLength(err),
+        'Content-Type': 'text/plain'
+      }).end(err);
+    }
+    else {
+      let resbody = "lend created with id : " + newLendId.toHexString();
       response.writeHead(201, {
         'Content-Length': Buffer.byteLength(resbody),
         'Content-Type': 'text/plain'
       }).end(resbody);
-    });
+    }
   });
 });
 
