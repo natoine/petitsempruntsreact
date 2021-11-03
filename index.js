@@ -4,9 +4,7 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000 ;
 
-const mongodb = require('mongodb');
-const urimongo = require("./resources/secret/databaseconfig.js").url;
-//console.log(urimongo);
+const dbservice = require('./services/DataBaseService');
 
 app.use(express.json());//needed to parse request body in json
 
@@ -15,13 +13,7 @@ app.get('/', function (req, res) {
 });
 
 app.get('/lends', function (req, res) {
-  mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }, function (err, client) {
-    client.db("petitsemprunts").collection("lends").find().toArray(function(err, items) {
-      res.send(items);
-    });
-  });
-
-
+  dbservice.getLends(function(data){res.send(data)});
 });
 
 app.post('/newlend', function (request, response){
