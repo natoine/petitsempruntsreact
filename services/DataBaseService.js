@@ -28,11 +28,10 @@ function createUser(user, callback) {
         let dbcol = client.db("petitsemprunts").collection("users");
         //already one user with that username
         dbcol.findOne({ "username": user.username }).then(function (data, error) {
-            console.log("find by username", user.username, error, data);
             if(error) callback(error, null);
             if (data) {
                 const error = new Error("username already in use");
-                error.code = 500;
+                error.code = 406;
                 callback(error, null);
                 client.close();
             }
@@ -40,11 +39,10 @@ function createUser(user, callback) {
             {
                 //already one user with that email
                 dbcol.findOne({ "usermail": user.usermail }).then(function (data, error) {
-                    console.log("find by usermail", user.usermail, error, data);
                     if(error) callback(error, null);
                     if (data) {
                         const error = new Error("mail already in use");
-                        error.code = 500;
+                        error.code = 406;
                         callback(error, null);
                         client.close();
                     }
@@ -52,7 +50,6 @@ function createUser(user, callback) {
                     {
                         //ok can create user
                         dbcol.insertOne(user, function (err, res) {
-                            console.log("create user");
                             if (err) callback(err, null);
                             else 
                             {
