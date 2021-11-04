@@ -35,6 +35,25 @@ app.post('/newlend', function (request, response) {
   });
 });
 
+app.post('/newuser', function (request, response) {
+  const newUser = request.body;
+  dbservice.createUser(newUser, function (error, newUserId) {
+    if (error) {
+      response.writeHead(500, {
+        'Content-Length': Buffer.byteLength(err),
+        'Content-Type': 'text/plain'
+      }).end(err);
+    }
+    else {
+      let resbody = "user created with id : " + newUserId.toHexString();
+      response.writeHead(201, {
+        'Content-Length': Buffer.byteLength(resbody),
+        'Content-Type': 'text/plain'
+      }).end(resbody);
+    }
+  });
+});
+
 app.listen(PORT, function () {
   console.log('Petits emprunts lancé sur le port :' + PORT);
 });

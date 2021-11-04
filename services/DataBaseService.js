@@ -23,7 +23,21 @@ function createLend(lend, callback) {
     });
 }
 
+function createUser(user, callback) {
+    mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }, function (err, client) {
+        let dbcol = client.db("petitsemprunts").collection("users");
+        dbcol.insertOne(user, function (err, res) {
+            if (err) callback(err, null);
+            else {
+                callback(null, res.insertedId);
+                client.close();
+            }
+        });
+    });
+}
+
 module.exports = {
     getLends: getLends,
-    createLend: createLend
+    createLend: createLend,
+    createUser: createUser
 }
