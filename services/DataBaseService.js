@@ -26,11 +26,42 @@ function createLend(lend, callback) {
 function createUser(user, callback) {
     mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }, function (err, client) {
         let dbcol = client.db("petitsemprunts").collection("users");
-        dbcol.insertOne(user, function (err, res) {
-            if (err) callback(err, null);
-            else {
-                callback(null, res.insertedId);
+        //already one user with that username
+        dbcol.findOne({ "username": user.username }).then(function (data, error) {
+            console.log("find by username", user.username, error, data);
+            if(error) callback(error, null);
+            if (data) {
+                const error = new Error("username already in use");
+                error.code = 500;
+                callback(error, null);
                 client.close();
+            }
+            else 
+            {
+                //already one user with that email
+                dbcol.findOne({ "usermail": user.usermail }).then(function (data, error) {
+                    console.log("find by usermail", user.usermail, error, data);
+                    if(error) callback(error, null);
+                    if (data) {
+                        const error = new Error("mail already in use");
+                        error.code = 500;
+                        callback(error, null);
+                        client.close();
+                    }
+                    else
+                    {
+                        //ok can create user
+                        dbcol.insertOne(user, function (err, res) {
+                            console.log("create user");
+                            if (err) callback(err, null);
+                            else 
+                            {
+                                callback(null, res.insertedId);
+                                client.close();
+                            }
+                        });
+                    }
+                });
             }
         });
     });

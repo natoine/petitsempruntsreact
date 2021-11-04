@@ -20,10 +20,10 @@ app.post('/newlend', function (request, response) {
   const newlend = request.body;
   dbservice.createLend(newlend, function (error, newLendId) {
     if (error) {
-      response.writeHead(500, {
-        'Content-Length': Buffer.byteLength(err),
+      response.writeHead(error.code, {
+        'Content-Length': Buffer.byteLength(error.message),
         'Content-Type': 'text/plain'
-      }).end(err);
+      }).end(error.message);
     }
     else {
       let resbody = "lend created with id : " + newLendId.toHexString();
@@ -39,10 +39,10 @@ app.post('/newuser', function (request, response) {
   const newUser = request.body;
   dbservice.createUser(newUser, function (error, newUserId) {
     if (error) {
-      response.writeHead(500, {
-        'Content-Length': Buffer.byteLength(err),
+      response.writeHead(error.code, {
+        'Content-Length': Buffer.byteLength(error.message),
         'Content-Type': 'text/plain'
-      }).end(err);
+      }).end(error.message);
     }
     else {
       let resbody = "user created with id : " + newUserId.toHexString();
