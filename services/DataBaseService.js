@@ -12,16 +12,15 @@ function getLends(callback) {
 }
 
 function createLend(lend, callback) {
-    mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }, function (err, client) {
-        let dbcol = client.db("petitsemprunts").collection("lends");
-        dbcol.insertOne(lend, function (err, res) {
-            if (err) callback(err, null);
-            else {
-                callback(null, res.insertedId);
-                client.close();
-            }
+    mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }).then(client => {
+        client.db("petitsemprunts").collection("lends").insertOne(lend).then(function(data){
+            callback(null, data.insertedId);
+            client.close();
         });
-    });
+    }).catch(function(err){
+        const error = new Error("unable to connect DB");
+        error.code = 500 ;
+        callback(error, null);});
 }
 
 function createUser(user, callback) {
