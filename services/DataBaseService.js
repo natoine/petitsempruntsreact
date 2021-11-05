@@ -6,6 +6,7 @@ function getLends(callback) {
     mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }, function (err, client) {
         client.db("petitsemprunts").collection("lends").find().toArray(function (err, items) {
             callback(items);
+            client.close();
         });
     });
 }
