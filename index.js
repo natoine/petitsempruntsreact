@@ -12,8 +12,18 @@ app.get('/', function (req, res) {
   res.send('Bienvenue sur petits emprunts bientôt en react - on bosse sur la home pour le moment !');
 });
 
-app.get('/lends', function (req, res) {
-  dbservice.getLends(function (data) { res.send(data) });
+app.get('/lends', function (request, response) {
+  dbservice.getLends(function (error, data) {
+    if (error) {
+      response.writeHead(error.code, {
+        'Content-Length': Buffer.byteLength(error.message),
+        'Content-Type': 'text/plain'
+      }).end(error.message);
+    }
+    else {
+      response.send(data);
+    }
+  });
 });
 
 app.post('/newlend', function (request, response) {

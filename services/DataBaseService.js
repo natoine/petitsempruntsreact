@@ -3,12 +3,15 @@ const urimongo = require("../resources/secret/databaseconfig.js").url;
 //console.log(urimongo);
 
 function getLends(callback) {
-    mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }, function (err, client) {
-        client.db("petitsemprunts").collection("lends").find().toArray(function (err, items) {
-            callback(items);
+    mongodb.MongoClient.connect(urimongo, { useUnifiedTopology: true }).then(client => {
+        client.db("petitsemprunts").collection("lends").find().toArray().then(items => {
+            callback(null, items);
             client.close();
         });
-    });
+    }).catch(function(err){
+        const error = new Error("unable to connect DB");
+        error.code = 500 ;
+        callback(error, null);});
 }
 
 function createLend(lend, callback) {
